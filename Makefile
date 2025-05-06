@@ -1,8 +1,8 @@
 # Variables
-DOCKER_REGISTRY=langgenius
+DOCKER_REGISTRY=172.16.62.218:8005/centific_ai
 WEB_IMAGE=$(DOCKER_REGISTRY)/dify-web
 API_IMAGE=$(DOCKER_REGISTRY)/dify-api
-VERSION=latest
+VERSION=0.15.3
 
 # Build Docker images
 build-web:

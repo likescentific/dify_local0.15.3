@@ -75,7 +75,6 @@ const ChatRecord = () => {
       }
     }
   }, [appDetail, currentConversationID])
-
   useEffect(() => {
     handleFetchConversationMessages()
   }, [currentConversationID, appDetail, handleFetchConversationMessages])

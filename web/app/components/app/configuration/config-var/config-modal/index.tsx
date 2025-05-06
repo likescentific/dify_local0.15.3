@@ -21,7 +21,7 @@ import Checkbox from '@/app/components/base/checkbox'
 import { DEFAULT_FILE_UPLOAD_SETTING } from '@/app/components/workflow/constants'
 import { DEFAULT_VALUE_MAX_LEN } from '@/config'
 
-const TEXT_MAX_LENGTH = 256
+const TEXT_MAX_LENGTH = 512
 
 export type IConfigModalProps = {
   isCreate?: boolean

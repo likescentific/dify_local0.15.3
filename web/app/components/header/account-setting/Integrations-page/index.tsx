@@ -23,6 +23,10 @@ export default function IntegrationsPage() {
       name: t('common.integrations.github'),
       description: t('common.integrations.githubAccount'),
     },
+    maxkey: {
+      name: t('common.integrations.maxkey'),
+      description: t('common.integrations.maxkeyAccount'),
+    },
   }
 
   const { data } = useSWR({ url: '/account/integrates' }, fetchAccountIntegrates)

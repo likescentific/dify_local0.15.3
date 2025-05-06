@@ -74,7 +74,6 @@ class GitHubOAuth(OAuth):
         response = requests.get(self._USER_INFO_URL, headers=headers)
         response.raise_for_status()
         user_info = response.json()
-
         email_response = requests.get(self._EMAIL_INFO_URL, headers=headers)
         email_info = email_response.json()
         primary_email: dict = next((email for email in email_info if email["primary"] == True), {})
@@ -131,3 +130,49 @@ class GoogleOAuth(OAuth):
 
     def _transform_user_info(self, raw_info: dict) -> OAuthUserInfo:
         return OAuthUserInfo(id=str(raw_info["sub"]), name="", email=raw_info["email"])
+    
+class MaxkeyOAuth(OAuth):
+    _AUTH_URL = "http://180.101.12.89:5053/sign/authz/oauth/v20/authorize"
+    _TOKEN_URL = "http://180.101.12.89:5053/sign/authz/oauth/v20/token"
+    _USER_INFO_URL = "http://180.101.12.89:5053/sign/api/oauth/v20/me"
+
+    def get_authorization_url(self, invite_token: Optional[str] = None):
+        params = {
+            "client_id": self.client_id,
+            "response_type": "code",
+            "redirect_uri": self.redirect_uri,
+            "scope": "read",
+        }
+        if invite_token:
+            params["state"] = invite_token
+        return f"{self._AUTH_URL}?{urllib.parse.urlencode(params)}"
+
+    def get_access_token(self, code: str):
+        data = {
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "code": code,
+            "grant_type": "authorization_code",
+            "redirect_uri": self.redirect_uri
+        }
+        headers = {"Content-Type": "application/x-www-form-urlencoded"}
+        print(data,flush=True)
+        response = requests.post(self._TOKEN_URL, data=data, headers=headers)
+        print(response.text,flush=True) 
+        response_json = response.json()
+        access_token = response_json.get("access_token")
+
+        if not access_token:
+            raise ValueError(f"Error in Maxkey OAuth: {response_json}")
+
+        return access_token
+
+    def get_raw_user_info(self, token: str):
+        headers = {"Authorization": f"Bearer {token}"}
+        response = requests.get(self._USER_INFO_URL, headers=headers)
+        response.raise_for_status()
+        return response.json()
+
+    def _transform_user_info(self, raw_info: dict) -> OAuthUserInfo:
+        print(raw_info,flush=True)
+        return OAuthUserInfo(id=str(raw_info["userId"]), name=str(raw_info["username"]), email=raw_info["email"])

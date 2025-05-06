@@ -12,7 +12,6 @@ type SearchInputProps = {
   onChange: (v: string) => void
   white?: boolean
 }
-
 const SearchInput: FC<SearchInputProps> = ({
   placeholder,
   className,

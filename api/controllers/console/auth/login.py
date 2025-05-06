@@ -3,6 +3,7 @@ from typing import cast
 import flask_login  # type: ignore
 from flask import request
 from flask_restful import Resource, reqparse  # type: ignore
+from configs import dify_config
 
 import services
 from configs import dify_config
@@ -105,7 +106,11 @@ class LogoutApi(Resource):
             return {"result": "success"}
         AccountService.logout(account=account)
         flask_login.logout_user()
-        return {"result": "success"}
+        redirect_uri = dify_config.CONSOLE_API_URL + "/console/api/oauth/login/maxkey"
+        redirect_uri = dify_config.MAXKEY_LOGOUT_REDIRECT_URI.format(redirect_uri)+"?redirect_uri=" + redirect_uri
+        print(redirect_uri,flush=True)
+        return {"result": redirect_uri}
+        # return {"result": "success"}
 
 
 class ResetPasswordSendEmailApi(Resource):

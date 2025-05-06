@@ -96,7 +96,6 @@ const Base: FC<Props> = ({
                 <ClipboardCheck className='mx-1 w-3.5 h-3.5 text-text-tertiary' />
               )
             }
-
             <div className='ml-1'>
               <ToggleExpandBtn isExpand={isExpand} onExpandChange={setIsExpand} />
             </div>

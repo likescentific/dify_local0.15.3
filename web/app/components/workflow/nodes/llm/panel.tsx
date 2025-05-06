@@ -20,7 +20,6 @@ import ResultPanel from '@/app/components/workflow/run/result-panel'
 import Tooltip from '@/app/components/base/tooltip'
 import Editor from '@/app/components/workflow/nodes/_base/components/prompt/editor'
 import { useRetryDetailShowInSingleRun } from '@/app/components/workflow/nodes/_base/components/retry/hooks'
-
 const i18nPrefix = 'workflow.nodes.llm'
 
 const Panel: FC<NodePanelProps<LLMNodeType>> = ({

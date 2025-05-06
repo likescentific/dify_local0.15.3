@@ -41,16 +41,24 @@ export default function AppSelector({ isMobile }: IAppSelector) {
   const canEmailSupport = plan.type === Plan.professional || plan.type === Plan.team || plan.type === Plan.enterprise
 
   const handleLogout = async () => {
-    await logout({
-      url: '/logout',
-      params: {},
-    })
-
-    localStorage.removeItem('setup_status')
-    localStorage.removeItem('console_token')
-    localStorage.removeItem('refresh_token')
-
-    router.push('/signin')
+    try {
+      const response = await logout({
+        url: '/logout',
+        params: {},
+      })
+  
+      // 在这里处理返回的结果
+      console.log('Logout response:', response)
+      const redirectUri = response.result
+      localStorage.removeItem('setup_status')
+      localStorage.removeItem('console_token')
+      localStorage.removeItem('refresh_token')
+      // 重定向到登录页面
+      router.push(redirectUri)
+    } catch (error) {
+      console.error('Logout failed:', error)
+      // 处理错误，例如显示通知或提示用户
+    }
   }
 
   return (

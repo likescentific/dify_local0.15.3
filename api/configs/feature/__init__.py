@@ -483,6 +483,21 @@ class AuthConfig(BaseSettings):
         default=None,
     )
 
+    MAXKEY_CLIENT_ID: Optional[str]  = Field(
+        description="Maxkey OAuth client ID",
+        default=None,
+    )
+
+    MAXKEY_CLIENT_SECRET: Optional[str]  = Field(
+        description="Maxkey OAuth client secret",
+        default=None,
+    )
+
+    MAXKEY_LOGOUT_REDIRECT_URI: Optional[str]  = Field(
+        description="Maxkey LOGOUT redirect URI",
+        default=None,
+    )
+
     ACCESS_TOKEN_EXPIRE_MINUTES: PositiveInt = Field(
         description="Expiration time for access tokens in minutes",
         default=60,
@@ -495,6 +510,11 @@ class AuthConfig(BaseSettings):
 
     LOGIN_LOCKOUT_DURATION: PositiveInt = Field(
         description="Time (in seconds) a user must wait before retrying login after exceeding the rate limit.",
+        default=86400,
+    )
+
+    FORGOT_PASSWORD_LOCKOUT_DURATION: PositiveInt = Field(
+        description="Time (in seconds) a user must wait before retrying password reset after exceeding the rate limit.",
         default=86400,
     )
 

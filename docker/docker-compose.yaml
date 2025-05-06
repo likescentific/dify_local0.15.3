@@ -387,13 +387,18 @@ x-shared-env: &shared-api-worker-env
   POSITION_PROVIDER_EXCLUDES: ${POSITION_PROVIDER_EXCLUDES:-}
   CSP_WHITELIST: ${CSP_WHITELIST:-}
   CREATE_TIDB_SERVICE_JOB_ENABLED: ${CREATE_TIDB_SERVICE_JOB_ENABLED:-false}
+  MAXKEY_CLIENT_ID: ${MAXKEY_CLIENT_ID:-}
+  MAXKEY_CLIENT_SECRET: ${MAXKEY_CLIENT_SECRET:-}
+  MAXKEY_LOGOUT_REDIRECT_URI: ${MAXKEY_LOGOUT_REDIRECT_URI:-}
+  ALLOW_REGISTER: ${ALLOW_REGISTER:-False}
+  ALLOW_CREATE_WORKSPACE: ${ALLOW_CREATE_WORKSPACE:-False}
   MAX_SUBMIT_COUNT: ${MAX_SUBMIT_COUNT:-100}
   TOP_K_MAX_VALUE: ${TOP_K_MAX_VALUE:-10}
 
 services:
   # API service
   api:
-    image: langgenius/dify-api:0.15.3
+    image: ${DOCKER_REGISTRY}/centific_ai/dify-api:0.15.3
     restart: always
     environment:
       # Use the shared environment variables.
@@ -416,7 +421,7 @@ services:
   # worker service
   # The Celery worker for processing the queue.
   worker:
-    image: langgenius/dify-api:0.15.3
+    image: ${DOCKER_REGISTRY}/centific_ai/dify-api:0.15.3
     restart: always
     environment:
       # Use the shared environment variables.
@@ -438,7 +443,7 @@ services:
 
   # Frontend web application.
   web:
-    image: langgenius/dify-web:0.15.3
+    image: ${DOCKER_REGISTRY}/centific_ai/dify-web:0.15.3
     restart: always
     environment:
       CONSOLE_API_URL: ${CONSOLE_API_URL:-}
@@ -452,7 +457,7 @@ services:
 
   # The postgres database.
   db:
-    image: postgres:15-alpine
+    image: ${DOCKER_REGISTRY}/public/postgres:15-alpine
     restart: always
     environment:
       PGUSER: ${PGUSER:-postgres}
@@ -475,7 +480,7 @@ services:
 
   # The redis cache.
   redis:
-    image: redis:6-alpine
+    image: ${DOCKER_REGISTRY}/public/redis:6-alpine
     restart: always
     environment:
       REDISCLI_AUTH: ${REDIS_PASSWORD:-difyai123456}
@@ -489,7 +494,7 @@ services:
 
   # The DifySandbox
   sandbox:
-    image: langgenius/dify-sandbox:0.2.10
+    image: ${DOCKER_REGISTRY}/centific_ai/dify-sandbox:0.2.10
     restart: always
     environment:
       # The DifySandbox configurations
@@ -513,7 +518,7 @@ services:
   # for more information, please refer to
   # https://docs.dify.ai/learn-more/faq/install-faq#id-18.-why-is-ssrf_proxy-needed
   ssrf_proxy:
-    image: ubuntu/squid:latest
+    image: ${DOCKER_REGISTRY}/public/squid:latest
     restart: always
     volumes:
       - ./ssrf_proxy/squid.conf.template:/etc/squid/squid.conf.template
@@ -553,7 +558,7 @@ services:
   # The nginx reverse proxy.
   # used for reverse proxying the API service and Web service.
   nginx:
-    image: nginx:latest
+    image: ${DOCKER_REGISTRY}/public/nginx:latest
     restart: always
     volumes:
       - ./nginx/nginx.conf.template:/etc/nginx/nginx.conf.template
